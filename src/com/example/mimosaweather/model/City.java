@@ -8,8 +8,8 @@ package com.example.mimosaweather.model;
 public class City {
 	private int id;   //±íÖÐµÄid×Ö¶Î
 	private String cityName;
-	private String cityCode;
-	private int provinceId;
+	private String cityEnName;
+	private String provinceEnName;
 	public int getId() {
 		return id;
 	}
@@ -22,17 +22,17 @@ public class City {
 	public void setCityName(String cityName) {
 		this.cityName = cityName;
 	}
-	public String getCityCode() {
-		return cityCode;
+	public String getCityEnName() {
+		return cityEnName;
 	}
-	public void setCityCode(String cityCode) {
-		this.cityCode = cityCode;
+	public void setCityEnName(String cityEnName) {
+		this.cityEnName = cityEnName;
 	}
-	public int getProvinceId() {
-		return provinceId;
+	public String getProvinceEnName() {
+		return provinceEnName;
 	}
-	public void setProvinceId(int provinceId) {
-		this.provinceId = provinceId;
+	public void setProvinceEnName(String provinceName) {
+		this.provinceEnName = provinceName;
 	}
 	
 }

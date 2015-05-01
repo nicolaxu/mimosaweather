@@ -13,16 +13,16 @@ public class MimosaWeatherOpenHelper extends SQLiteOpenHelper {
 	public static final String CREAT_PROVINCE_TABLE="create table Province ("
 			+"id integer primary key autoincrement,"
 			+"province_name text,"
-			+"province_code text)";
+			+"province_en_name text)";
 	
 	/**
 	 *city (市) 表的建立sql语句
 	 */
 	public static final String CREATE_CITY_TABLE="create table City ("
 			+"id integer primary key autoincrement,"
-			+"city_name text,"
-			+"city_code text,"
-			+"province_id integer)";
+			+"city_name tex,"
+			+"city_en_name text,"
+			+"province_en_name text)";
 	
 	/**
 	 * county(县)表的建立sql语句
@@ -30,7 +30,7 @@ public class MimosaWeatherOpenHelper extends SQLiteOpenHelper {
 	public static final String CREATE_COUNTY="create table County("
 			+"id integer primary key autoincrement,"
 			+"county_name text,"
-			+"county_code text)";
+			+"city_en_name text)";
 	
 	
 	//构造函数

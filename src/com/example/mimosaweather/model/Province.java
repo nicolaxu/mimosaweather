@@ -11,7 +11,7 @@ public class Province {
 
 	private int id; // ´æ´¢Ê¡±íµÄid×Ö¶Î
 	private String provinceName;
-	private String provinceCode;
+	private String provinceEnName;
 	public int getId() {
 		return id;
 	}
@@ -24,11 +24,11 @@ public class Province {
 	public void setProvinceName(String provinceName) {
 		this.provinceName = provinceName;
 	}
-	public String getProvinceCode() {
-		return provinceCode;
+	public String getProvinceEnName() {
+		return provinceEnName;
 	}
-	public void setProvinceCode(String provinceCode) {
-		this.provinceCode = provinceCode;
+	public void setProvinceEnName(String provinceEnName) {
+		this.provinceEnName = provinceEnName;
 	}
 	
 

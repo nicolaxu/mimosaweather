@@ -34,7 +34,8 @@ public class MimosaWeatherDB {
 	private MimosaWeatherDB(Context context) {
 		MimosaWeatherOpenHelper helper = new MimosaWeatherOpenHelper(context,
 				DB_NAME, null, VERSION);
-		db = helper.getWritableDatabase();
+		//实例化数据库对象db
+		db = helper.getWritableDatabase(); 
 	}
 
 	/**
@@ -59,7 +60,7 @@ public class MimosaWeatherDB {
 		if (province != null) {
 			ContentValues values = new ContentValues(); // 实例化ContentValues，contentvalues只能存储基本类型的数据，不可存储对象，这点没有Hashtable好
 			values.put("province_name", province.getProvinceName());
-			values.put("province_code", province.getProvinceCode());
+			values.put("province_en_name", province.getProvinceEnName());
 			db.insert("Province", null, values);
 		}
 	}
@@ -70,6 +71,7 @@ public class MimosaWeatherDB {
 	 * a:获取省份表的游标 。
 	 * 
 	 * b:从数据表中读取到相应的数据存储到province对象中，并存入list泛型中。
+	 * 因为省份信息是只要查询就直接全部加载出来的，不存在哪个国家的哪个省份，所以此方法没有参数
 	 */
 	public List<Province> loadProvince() {
 		List<Province> list = new ArrayList<Province>();
@@ -81,8 +83,8 @@ public class MimosaWeatherDB {
 				province.setId(cursor.getInt(cursor.getColumnIndex("id")));
 				province.setProvinceName(cursor.getString(cursor
 						.getColumnIndex("province_name")));
-				province.setProvinceCode(cursor.getString(cursor
-						.getColumnIndex("province_code")));
+				province.setProvinceEnName(cursor.getString(cursor
+						.getColumnIndex("province_en_name")));
 				list.add(province);
 			} while (cursor.moveToNext());
 		}
@@ -100,8 +102,8 @@ public class MimosaWeatherDB {
 		if (city != null) {
 			ContentValues values = new ContentValues();
 			values.put("city_name", city.getCityName());
-			values.put("city_code", city.getCityCode());
-			values.put("province_id", city.getProvinceId());
+			values.put("city_en_name", city.getCityEnName());
+			values.put("province_en_name", city.getProvinceEnName());
 			db.insert("City", null, values);
 		}
 	}
@@ -115,27 +117,44 @@ public class MimosaWeatherDB {
 	 * 
 	 * C：从数据库中读取某省下的城市信息,并存入对像相应的变量中。
 	 */
-	public List<City> loadCities(int provinceId) {
+	public List<City> loadCities(String provinceEnName) {
 		List<City> list = new ArrayList<City>();
-		Cursor cursor = db.query("City", null, "province_id=?",
-				new String[] { String.valueOf(provinceId) }, null, null, null);// String[]
-																				// selectionArgs
+		Cursor cursor = db.query("City", null, "province_en_name=?",
+				new String[] { String.valueOf(provinceEnName) }, null, null, null);
+																			
 		if (cursor.moveToFirst()) {
 			do {
 				// 创建City对象
 				City city = new City();
 				city.setId(cursor.getInt(cursor.getColumnIndex("id")));
-				city.setCityCode(cursor.getString(cursor
-						.getColumnIndex("city_code")));
+				city.setCityEnName(cursor.getString(cursor
+						.getColumnIndex("city_en_name")));
 				city.setCityName(cursor.getString(cursor
 						.getColumnIndex("city_name")));
-				city.setProvinceId(provinceId);
+				city.setProvinceEnName(provinceEnName);
 				list.add(city);
 			} while (cursor.moveToNext());
 		}
 		return list;
 	}
-
+	
+	/**
+	 * 将County实例存储到数据库中 。
+	 * 
+	 * a:创建ContentValues对象，赋值键值对 。
+	 * 
+	 * b:通过db数据库对象存入county表中。
+	 */
+	public void saveCounty(County county){
+		if(county!=null){
+			ContentValues values=new ContentValues();
+			values.put("county_name", county.getCountyName());
+			values.put("city_en_name", county.getCityEnName());
+			db.insert("County", null, values);
+		}
+	}
+	
+	
 	/**
 	 * 从数据库中读取某市下的城市信息。
 	 * 
@@ -145,18 +164,17 @@ public class MimosaWeatherDB {
 	 * 
 	 * C：从数据库中读取某市下的县的信息,并存入对像相应的变量中。
 	 */
-	public List<County> loadCounties(int cityId) {
+	public List<County> loadCounties(String cityEnName) {
 		List<County> list = new ArrayList<County>();
-		Cursor cursor = db.query("County", null, "city_id=?",
-				new String[] { String.valueOf(cityId) }, null, null, null);
+		Cursor cursor = db.query("County", null, "city_en_name=?",
+				new String[] { String.valueOf(cityEnName) }, null, null, null);
 		if(cursor.moveToFirst()){
 			do{
 				//创建County对象，用于存储从数据库中读取到的信息
 				County county=new County();
-				county.setId(cursor.getInt(cursor.getColumnIndex("countyId")));
-				county.setCountyCode(cursor.getString(cursor.getColumnIndex("countyCode")));
-				county.setCountyName(cursor.getString(cursor.getColumnIndex("countyName")));
-				county.setCityId(cityId);
+				county.setId(cursor.getInt(cursor.getColumnIndex("id")));
+				county.setCountyName(cursor.getString(cursor.getColumnIndex("county_name")));
+				county.setCityEnName(cityEnName);
 				list.add(county);
 			}while(cursor.moveToNext());
 		}
